@@ -1,6 +1,5 @@
-from src.view.main_view import WelcomeView
+from src.view.window_controller import WindowMainController
 
 if __name__ == '__main__':
-    print("Hello World")
-    view = WelcomeView()
-    view.start()
+    controller = WindowMainController()
+    controller.start()
