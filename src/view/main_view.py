@@ -1,20 +1,30 @@
-# src/view/welcome_view.py
 import tkinter as tk
 from tkinter import ttk
 
+from src.config import CREATORS
+
 
 class WelcomeView:
+
     def __init__(self, controller=None):
         self.controller = controller
         self.root = tk.Tk()
         self.root.title("Simulador de Números Pseudoaleatorios")
-        self.creators = [
-            "Maria Jose Blanco Marquez",
-            "Oscar Javier Sanabria",
-            "Jorge Sebastián Mejia López",
-            "Santiago Andrés Orjuela López"
-        ]
+        self.creators = CREATORS
         self.create_widgets()
+        self.center_window()
+
+    def center_window(self):
+        self.root.update_idletasks()
+        width = self.root.winfo_reqwidth()
+        height = self.root.winfo_reqheight()
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        x = (screen_width / 2) - (width / 2)
+        y = (screen_height / 2) - (height / 2)
+
+        self.root.geometry(f'{width}x{height}+{int(x)}+{int(y)}')
 
     def create_widgets(self):
         self.frame = ttk.Frame(self.root, padding=20)
