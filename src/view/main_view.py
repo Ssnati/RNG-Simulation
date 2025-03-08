@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+import src.view.common_creators as cc
 from src.config import CREATORS
-from src.styles import STYLES
 
 
 class WelcomeView(tk.Frame):
@@ -15,10 +15,10 @@ class WelcomeView(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        label_title = self.create_label("Bienvenido al Simulador", 'title')
+        label_title = cc.create_label(self.frame_container, "Bienvenido al Simulador", 'title')
         label_title.pack(pady=10)
 
-        label_subtitle = self.create_label("Simulador de Números Pseudoaleatorios", 'subtitle')
+        label_subtitle = cc.create_label(self.frame_container, "Simulador de Números Pseudoaleatorios", 'subtitle')
         label_subtitle.pack(pady=5)
 
         self.create_creator_label()
@@ -31,15 +31,11 @@ class WelcomeView(tk.Frame):
         self.btn_simulator.pack(pady=20)
 
     def create_creator_label(self):
-        label_creator = self.create_label("Creado por:", 'creator_title')
+        label_creator = cc.create_label(self.frame_container, "Creado por:", 'creator_title')
         label_creator.pack(pady=5)
         for creator in self.creators:
-            label_creator = self.create_label(creator, 'body')
+            label_creator = cc.create_label(self.frame_container, creator, 'body')
             label_creator.pack(pady=5)
-
-    def create_label(self, text, style):
-        imported_style = STYLES.get(style, {})
-        return ttk.Label(self.frame_container, text=text, **imported_style)
 
     def on_use_simulator(self):
         if self.controller:

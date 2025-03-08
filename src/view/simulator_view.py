@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from src.styles import STYLES
+import src.view.common_creators as cc
 
 
 class SimulatorView(tk.Frame):
@@ -14,11 +14,7 @@ class SimulatorView(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.create_label("Simulador de Números Pseudoaleatorios", 'title').pack(pady=10)
-
-    def create_label(self, text, style):
-        imported_style = STYLES.get(style, {})
-        return ttk.Label(self.frame_container, text=text, **imported_style)
+        cc.create_label(self.frame_container, "Simulador de Números Pseudoaleatorios", 'title').pack(pady=10)
 
     def destroy(self):
         self.frame_container.destroy()
