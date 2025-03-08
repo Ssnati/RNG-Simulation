@@ -4,22 +4,23 @@ from src.view.simulator_view import SimulatorView
 
 
 class WindowMainController(tk.Tk):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
         self.title("Simulador de Números Pseudoaleatorios")
         self.current_view = None
+        self.controller = controller
 
     def show_welcome(self):
         if self.current_view:
             self.current_view.destroy()
-        self.current_view = WelcomeView(self, self)
+        self.current_view = WelcomeView(self, self.controller)
         self.current_view.pack()
         self.center_window()
 
     def show_simulator(self):
         if self.current_view:
             self.current_view.destroy()
-        self.current_view = SimulatorView(self, self)
+        self.current_view = SimulatorView(self, self.controller)
         self.current_view.pack()
         self.center_window()
 
