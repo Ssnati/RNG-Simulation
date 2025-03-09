@@ -19,43 +19,59 @@ class SimulatorView(tk.Frame):
         title_label = cc.create_label(self.frame_container, "Simulador de Números Pseudoaleatorios", 'title')
         title_label.grid(row=0, column=0, columnspan=2, rowspan=1)
 
-        self.buttons_frame = ButtonsFrame(self.frame_container, self.controller)
-        self.buttons_frame.grid(row=1, column=0, columnspan=2)
-
-        # Este label es para que haya un espacio entre los botones y la tabla
-        cc.create_label(self.frame_container, " " * 100, 'title').grid(row=2, column=0, columnspan=2, rowspan=1)
-
+        # Primero creamos el frame de las tablas (porque le pasaremos su variable al ButtonsFrame)
         self.tables_frame = TablesGeneratorAndTestFrame(self.frame_container, self.controller)
         self.tables_frame.grid(row=3, column=0, columnspan=2)
+
+        # Ahora el frame de botones, pasándole la referencia del tables_frame
+        self.buttons_frame = ButtonsFrame(self.frame_container, self.controller, self.tables_frame)
+        self.buttons_frame.grid(row=1, column=0, columnspan=2)
+
+        # Espacio de separación entre botones y tabla
+        cc.create_label(self.frame_container, " " * 100, 'title').grid(row=2, column=0, columnspan=2, rowspan=1)
 
     def destroy(self):
         self.frame_container.destroy()
 
     def pack(self):
-        #  Le decimos al frame que se expanda y que se llene de acuerdo al tamaño de la ventana
+        # Le decimos al frame que se expanda y que se llene de acuerdo al tamaño de la ventana
         self.frame_container.grid(row=0, column=0, sticky="nsew")
 
-        # Estos son métodos para la configuración interna del frame por lo que no tiene que ver con la línea anterior
+        # Configuración interna del frame
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-
+        
 class ButtonsFrame(tk.Frame):
-
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, tables_frame):
         super().__init__(parent)
         self.controller = controller
-        self.generator_types = ["LCG", "Cuadrados Medios", "MLCG", "Exponencial", "Producto Medio"]
+        self.tables_frame = tables_frame  # Referencia al TablesGeneratorAndTestFrame
+        self.generator_types = ["LCG", "MLCG", "MiddleSquare", "ProductoMedio", "Exponential"]
         self.generator_test = ["Chi Cuadrada", "Kolmogorov Smirnov", "MiddleProof"]
         self.create_widgets()
 
     def create_widgets(self):
-        selected_generator = tk.StringVar()
-        generator_combo = cc.create_combobox(self, self.generator_types, selected_generator, 'combo')
-        generator_combo.bind("<<ComboboxSelected>>",
-                             lambda _: self.controller.change_generator_selected(selected_generator.get()))
+        # Usamos la variable del generador del tables_frame
+        selected_generator = self.tables_frame.generator_var
+
+        # Creamos el combobox en el ButtonsFrame
+        generator_combo = ttk.Combobox(self, textvariable=selected_generator, values=self.generator_types, state="readonly")
         generator_combo.grid(row=0, column=0, padx=10, pady=10)
 
+        # Evento cuando seleccionan un item
+        def on_select(_):
+            selected_value = selected_generator.get()
+
+            # Actualiza los campos de input en tables_frame
+            self.tables_frame.update_input_fields()
+
+            # También avisamos al controlador, si se requiere lógica extra
+            self.controller.change_generator_selected(selected_value)
+
+        generator_combo.bind("<<ComboboxSelected>>", on_select)
+
+        # Botón para guardar en CSV
         save_button = ttk.Button(
             self,
             text="Guardar en CSV",
@@ -63,6 +79,7 @@ class ButtonsFrame(tk.Frame):
         )
         save_button.grid(row=0, column=1, padx=10, pady=10)
 
+        # Botón para salir
         exit_button = ttk.Button(
             self,
             text="Salir",

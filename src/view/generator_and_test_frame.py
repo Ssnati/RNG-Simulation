@@ -21,15 +21,10 @@ class TablesGeneratorAndTestFrame(tk.Frame):
         self.right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=10, pady=10)
 
         # Título del frame (lo ponemos arriba en el frame derecho)
-        tk.Label(self.right_frame, text="Generadores", font=("Arial", 16)).pack(pady=10)
+        tk.Label(self.right_frame, text="Generadores de Números Pseudoaleatorios", font=("Arial", 16)).pack(pady=10)
 
-        # Sección de selección de generador
+        # Variable para almacenar el generador seleccionado
         self.generator_var = tk.StringVar(value="LCG")
-        generators = ["LCG", "MLCG", "MiddleSquare", "ProductoMedio", "Exponential"]
-        tk.Label(self.right_frame, text="Selecciona el Generador:").pack()
-        self.generator_menu = ttk.Combobox(self.right_frame, textvariable=self.generator_var, values=generators, state="readonly")
-        self.generator_menu.pack(pady=5)
-        self.generator_menu.bind("<<ComboboxSelected>>", self.update_input_fields)
 
         # Sección de Inputs
         self.input_frame = tk.Frame(self.right_frame)
@@ -47,6 +42,8 @@ class TablesGeneratorAndTestFrame(tk.Frame):
 
         # Inicializa los campos de entrada según el generador inicial
         self.update_input_fields()
+
+
 
     def clear_input_frame(self):
         for widget in self.input_frame.winfo_children():
