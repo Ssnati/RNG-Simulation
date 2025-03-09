@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 
 import src.view.common_creators as cc
+from src.view.generator_and_test_frame import TablesGeneratorAndTestFrame
 
 
 class SimulatorView(tk.Frame):
@@ -22,6 +23,9 @@ class SimulatorView(tk.Frame):
 
         # Este label es para que haya un espacio entre los botones y la tabla
         cc.create_label(self.frame_container, " " * 100, 'title').grid(row=2, column=0, columnspan=2, rowspan=1)
+
+        self.tables_frame = TablesGeneratorAndTestFrame(self.frame_container, self.controller)
+        self.tables_frame.grid(row=3, column=0, columnspan=2)
 
     def destroy(self):
         self.frame_container.destroy()
