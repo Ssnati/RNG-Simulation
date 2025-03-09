@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 class TablesGeneratorAndTestFrame(tk.Frame):
     def __init__(self, parent, controller=None):
         super().__init__()
