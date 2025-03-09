@@ -13,6 +13,7 @@ class SimulatorView(tk.Frame):
         self.controller = controller
         self.frame_container = ttk.Frame(self.root_window)
         self.create_widgets()
+        self.pack()  # Asegúrate de llamar a pack() aquí
 
     def create_widgets(self):
         title_label = cc.create_label(self.frame_container, "Simulador de Números Pseudoaleatorios", 'title')
@@ -32,7 +33,7 @@ class SimulatorView(tk.Frame):
 
     def pack(self):
         #  Le decimos al frame que se expanda y que se llene de acuerdo al tamaño de la ventana
-        self.frame_container.pack(fill='both', expand=True, padx=20, pady=20)
+        self.frame_container.grid(row=0, column=0, sticky="nsew")
 
         # Estos son métodos para la configuración interna del frame por lo que no tiene que ver con la línea anterior
         self.columnconfigure(0, weight=1)
