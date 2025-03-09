@@ -1,6 +1,7 @@
 import math
 import random_number
 import statistics as st
+from scipy.stats import chi2
 
 class ChiSquare:
 
@@ -12,6 +13,7 @@ class ChiSquare:
         self.range_value = (self.max_value - self.min_value)/self.intervals_number
         self.intervals = {}
         self.squ_chi = 0
+        self.squ_chi_critic = chi2.ppf(0.95, self.intervals_number - 1)
 
     def create_intervals(self):
         expected_freq = len(self.number_list) / self.intervals_number
@@ -35,8 +37,8 @@ class ChiSquare:
     def show_intervals(self):
         for interval, frequency in self.intervals.items():
             print(f"Intervalo {interval}: {frequency}")
-        print(self.squ_chi)
-"""
+        print(f"{self.squ_chi}    critico {self.squ_chi_critic}"  )
+
 if __name__ == "__main__":
     alg = random_number.LCG(5, 7, 991, 3, 4, 19)
     alg.calculate_seed(30)
@@ -46,7 +48,6 @@ if __name__ == "__main__":
     pm.calculate_frequence()
     pm.calculate_squ_chi()
     pm.show_intervals()
-"""
 
 class MiddleProof:
     def __init__(self, number_list):
@@ -100,6 +101,8 @@ class KS:
         self.max_value = max(number_list)
         self.range_value = (self.max_value - self.min_value)/self.intervals_number
         self.intervals = {}
+        self.dm_calculated = 0
+        self.dm_critic = 1.36/(math.sqrt(len(self.number_list)))
 
     def create_intervals(self):
         expected_freq = len(self.number_list) / self.intervals_number
@@ -125,29 +128,25 @@ class KS:
             frequency["prob_o_a"] = frequency["freq_o_a"] / size_list
 
     def calculate_dm(self):
-        dm_calculated = 0
-        dm_critic = 1.36/(math.sqrt(len(self.number_list)))
         for frequency in self.intervals.values():
             frequency["abs_diff"] = abs(frequency["prob_o_a"] - frequency["prob_e_a"])
-            if frequency["abs_diff"] >= dm_calculated:
-                dm_calculated = frequency["abs_diff"]
-        self.calculate_proof(dm_calculated, dm_critic)
+            if frequency["abs_diff"] >= self.dm_calculated:
+                self.dm_calculated = frequency["abs_diff"]
+        self.calculate_proof()
 
 
-    def calculate_proof(self, dm_calculated, dm_critic):
-        self.create_intervals()
-        self.calculate_frequence_obtained()
-        self.calculate_frequence_obtained_acumulated()
-        
-        if dm_calculated < dm_critic:
-            print(f"La lista de números aleatorios sigue una distribución uniforme (DM = {dm_calculated:.6f}, DM crítico = {dm_critic:.6f})")
+
+    def calculate_proof(self):
+        if self.dm_calculated < self.dm_critic:
+            print(f"La lista de números aleatorios sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
         else:
-            print(f"La lista de números aleatorios NO sigue una distribución uniforme (DM = {dm_calculated:.6f}, DM crítico = {dm_critic:.6f})")
+            print(f"La lista de números aleatorios NO sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
 
     def show_intervals(self):
         for interval, frequency in self.intervals.items():
             print(f"Intervalo {interval}: {frequency}")
 
+"""
 if __name__ == "__main__":
     alg = random_number.LCG(5, 7, 991, 3, 4, 19)
     alg.calculate_seed(60)
@@ -158,4 +157,6 @@ if __name__ == "__main__":
     pm.calculate_frequence_obtained_acumulated()
     pm.calculate_dm()
     pm.show_intervals()
+
+"""
     

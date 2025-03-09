@@ -62,6 +62,7 @@ if __name__ == "__main__":
 class MiddleSquare:
     def __init__(self, number, digits):
         self.list = []
+        self.normalized_list = []
         self.number = number
         self.digits = digits
         self.calculate()
@@ -79,12 +80,17 @@ class MiddleSquare:
         digits_to_del = len(str_n) - self.digits
         num_to_del = digits_to_del // 2
         fin = num_to_del + self.digits
-        return int(str_n[num_to_del:fin])
+        num = int(str_n[num_to_del:fin])
+        self.normalize_list(num)
+        return num
+    
+    def normalize_list(self, number):
+        self.normalized_list.append(number/pow(10, len(str(number))))
+
 
     def print_list(self):
-        for num in self.list:
-            print(num)
-
+        for i in range(len(self.list)):
+            print(f"{self.list[i]}   {self.normalized_list[i]}")
 
 
 class MLCG:
@@ -140,6 +146,7 @@ class ExponentialGenerator:
 class ProductoMedio:
     def __init__(self, number1, number2, digits):
         self.list = []
+        self.normalized_list = []
         self.number1 = number1
         self.number2 = number2
         self.digits = digits
@@ -158,9 +165,18 @@ class ProductoMedio:
         digitstodel = len(str_n) - self.digits
         numtodel = digitstodel // 2
         fin = numtodel + self.digits
-        return int(str_n[numtodel:fin])
+        num = int(str_n[numtodel:fin])
+        self.normalize_list(num)
+        return num
+    
+    def normalize_list(self, number):
+        self.normalized_list.append(number/pow(10, len(str(number))))
     
     def print_list(self):
-        for value in self.list:
-            print(value)
+        for i in range(len(self.list)):
+            print(f"{self.list[i]}   {self.normalized_list[i]}")
 
+
+if __name__ == "__main__":
+    pm = ProductoMedio(5015, 5734, 4)
+    pm.print_list()
