@@ -94,5 +94,4 @@ class ButtonsFrame(tk.Frame):
             filetypes=[("CSV", "*.csv")]
         )
         if file_path:
-            print(f"Guardando en {file_path}")
             self.controller.save_generation_numbers(file_path)

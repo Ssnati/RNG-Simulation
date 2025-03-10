@@ -1,5 +1,4 @@
 import math
-import random_number
 import statistics as st
 from scipy.stats import chi2
 
@@ -42,6 +41,7 @@ class ChiSquare:
         print(f"{self.squ_chi}    critico {self.squ_chi_critic}")
 
 
+"""
 if __name__ == "__main__":
     alg = random_number.LCG(5, 7, 991, 3, 4, 19)
     alg.calculate_seed(30)
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     pm.calculate_frequence()
     pm.calculate_squ_chi()
     pm.show_intervals()
+"""
 
 
 class MiddleProof:
@@ -127,7 +128,6 @@ class KS:
                             "abs_diff": 0}
                             }
             """
-
 
     def calculate_frequence_obtained(self):
         for number in self.number_list:

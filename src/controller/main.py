@@ -21,14 +21,12 @@ class Controller:
     def save_generation_numbers(self, path):
         self.exporter.path = path
         self.exporter.export(self.current_generation_list)
-        print(self.current_generation_list)
 
     def exit(self):
         self.main_window.show_welcome()
 
     def change_generator_selected(self, selected_generator):
         self.current_generation_method_name = selected_generator
-        print(selected_generator)
 
     def show_simulator(self):
         self.main_window.show_simulator()
