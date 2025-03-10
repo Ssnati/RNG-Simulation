@@ -11,7 +11,7 @@ class ChiSquare:
         self.min_value = min(number_list)
         self.max_value = max(number_list)
         self.range_value = (self.max_value - self.min_value) / \
-            self.intervals_number
+                           self.intervals_number
         self.intervals = {}
         self.squ_chi = 0
         self.squ_chi_critic = chi2.ppf(0.95, self.intervals_number - 1)
@@ -80,14 +80,6 @@ class MiddleProof:
         self.calculate_average()
         self.calculate_limits()
         self.calculate_variance()
-        if self.inf_lim <= self.average <= self.sup_lim:
-            print("Como el valor promedio se encuentra entre los límites superior e inferior, "
-                  "que son los límites de aceptación, se concluye que el método ha pasado la prueba de medias.")
-        else:
-            print("El método NO ha pasado la prueba de medias.")
-
-        print(
-            f"inf: {self.inf_lim}  prom: {self.average}  sup: {self.sup_lim}  var: {self.variance}")
 
 
 """
@@ -111,7 +103,7 @@ class KS:
         self.min_value = min(number_list)
         self.max_value = max(number_list)
         self.range_value = (self.max_value - self.min_value) / \
-            self.intervals_number
+                           self.intervals_number
         self.intervals = {}
         self.dm_calculated = 0
         self.dm_critic = 1.36 / (math.sqrt(len(self.number_list)))
@@ -161,11 +153,13 @@ class KS:
 
     def calculate_proof(self):
         if self.dm_calculated < self.dm_critic:
+            """
             print(
                 f"La lista de números aleatorios sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
         else:
             print(
                 f"La lista de números aleatorios NO sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
+        """
 
     def show_intervals(self):
         for interval, frequency in self.intervals.items():

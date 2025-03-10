@@ -77,9 +77,9 @@ class ChiSquareFrame(ttk.Frame):
     def update_check_label(self, chi_square_total, gl_critical):
         # Actualiza la etiqueta de verificación según la comparación de Chi² y GL crítico.
         if chi_square_total < gl_critical:
-            self.check_label.configure(text="✅ Sirve", foreground="green")
+            self.check_label.configure(text="✅ La lista de números aleatorios sigue una distribución uniforme", foreground="green")
         else:
-            self.check_label.configure(text="❌ No Sirve", foreground="red")
+            self.check_label.configure(text="❌ La lista de números aleatorios NO sigue una distribución uniforme", foreground="red")
 
     def fillTable(self, intervals, totals):
         # """Llena la tabla con los datos generados en el backend."""
@@ -117,7 +117,7 @@ class MiddleProofFrame(ttk.Frame):
 
         self.create_title()
         self.create_limits_and_average()
-        self.create_check_label("")
+        self.create_check_label()
 
     def create_title(self):
         """Crea el título de la prueba."""
@@ -135,10 +135,10 @@ class MiddleProofFrame(ttk.Frame):
         self.variance_label = ttk.Label(self, text="Varianza: 0,0")
         self.variance_label.pack()
 
-    def create_check_label(self, message):
+    def create_check_label(self):
         """Muestra si la prueba pasó o no."""
         self.check_label = ttk.Label(
-            self, text=message, font=("Arial", 12), foreground="red")
+            self, text="No hay prueba de medias", font=("Arial", 12), foreground="red")
         self.check_label.pack()
 
     def fillTotals(self, totals):
@@ -151,12 +151,27 @@ class MiddleProofFrame(ttk.Frame):
         self.variance_label.configure(
             text="Varianza: " + str(totals["variance"]))
 
+
         if totals["inf_lim"] <= totals["average"] <= totals["sup_lim"]:
-            self.create_check_label(
-                "Como el valor promedio se encuentra entre los límites superior e inferior,  \n que son los límites de aceptación, se concluye que el método ha pasado la prueba de medias.")
+            self.check_label.configure(text=
+                "✅ Como el valor promedio se encuentra entre los límites superior e inferior, que son los límites de aceptación,"
+                "\n\t se concluye que el método ha pasado la prueba de medias.",
+                foreground="green"
+            )
+        elif totals["inf_lim"] > totals["average"]:
+            self.check_label.configure(text=
+                "❌ Como el valor promedio es menor al límite inferior, el método no ha pasado la prueba de medias.",
+                                       foreground="red"
+                                       )
+        elif totals["sup_lim"] < totals["average"]:
+            self.check_label.configure(text=
+                "❌ Como el valor promedio es mayor al límite superior, el método no ha pasado la prueba de medias.",
+                                       foreground="red"
+                                       )
         else:
-            self.create_check_label(
-                "El método de generación de números aleatorios NO ha pasado la prueba de medias.")
+            self.check_label.configure(text="❌ No hay prueba de medias",
+                                       foreground="yellow"
+                                       )
 
 
 class KSFrame(ttk.Frame):
@@ -220,10 +235,10 @@ class KSFrame(ttk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(3, weight=1)
 
-    def create_check_label(self, message):
+    def create_check_label(self, message,foreground="black"):
         """Muestra si la prueba pasó o no."""
         self.check_label = ttk.Label(
-            self, text=message, font=("Arial", 12), foreground="red")
+            self, text=message, font=("Arial", 12), foreground=foreground)
         self.check_label.grid(row=4, column=0, columnspan=2, pady=10)
 
     def fillTotals(self, intervals, totals):
@@ -250,10 +265,10 @@ class KSFrame(ttk.Frame):
 
         if totals["dm_critic"] > totals["dm_calculated"]:
             self.create_check_label(
-                "La lista de números aleatorios sigue una distribución uniforme")
+                "✅ La lista de números aleatorios sigue una distribución uniforme", "green")
         else:
             self.create_check_label(
-                "La lista de números aleatorios NO sigue una distribución uniforme")
+                "❌ La lista de números aleatorios NO sigue una distribución uniforme", "red")
 
     # Formato KS:
 # {(0, 12): {
