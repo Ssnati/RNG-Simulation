@@ -5,6 +5,7 @@ from tkinter import ttk
 class ChiSquareFrame(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
         self.setup_ui()
 
     def setup_ui(self):
@@ -16,7 +17,9 @@ class ChiSquareFrame(ttk.Frame):
         self.create_table()
         self.create_scrollbar()
         self.create_results()
-       # self.update_check_label()
+
+
+    # self.update_check_label()
 
     def create_title(self):
         """Crea el título de la prueba."""
@@ -68,15 +71,15 @@ class ChiSquareFrame(ttk.Frame):
         self.gl_result_label = ttk.Label(self, text="0")
         self.gl_result_label.grid(row=5, column=1, sticky="w", padx=5, pady=5)
 
+        self.check_label = ttk.Label(self, text="❌ No Sirve", font=("Arial", 12))
+        self.check_label.grid(row=6, column=0, columnspan=2, pady=10, sticky="w")
+
     def update_check_label(self, chi_square_total, gl_critical):
-        self.check_label = self.check_label.configure(
-            text="", foreground="green")
         # Actualiza la etiqueta de verificación según la comparación de Chi² y GL crítico.
-        if hasattr(self, 'check_label'):  # Verifica que check_label existe antes de modificarlo
-            if chi_square_total < gl_critical:
-                self.check_label.configure(text="✅ Sirve", foreground="green")
-            else:
-                self.check_label.configure(text="❌ No Sirve", foreground="red")
+        if chi_square_total < gl_critical:
+            self.check_label.configure(text="✅ Sirve", foreground="green")
+        else:
+            self.check_label.configure(text="❌ No Sirve", foreground="red")
 
     def fillTable(self, intervals, totals):
         # """Llena la tabla con los datos generados en el backend."""
@@ -100,6 +103,7 @@ class ChiSquareFrame(ttk.Frame):
         self.chi_square_total_label.configure(text=totals["squ_chi"])
         self.gl_result_label.configure(text=totals["squ_chi_critic"])
         # {(0, 12): {"freq_o": 0, "freq_e": expected_freq, "square_chi": 0}}
+        self.update_check_label(totals["squ_chi"], totals["squ_chi_critic"])
 
 
 class MiddleProofFrame(ttk.Frame):
