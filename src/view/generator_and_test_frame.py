@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from src.model.random_number import LCG, MLCG, MiddleSquare, ProductoMedio, ExponentialGenerator
-
 class TablesGeneratorAndTestFrame(tk.Frame):
     def __init__(self, parent, controller=None):
         super().__init__(parent)
@@ -42,8 +41,6 @@ class TablesGeneratorAndTestFrame(tk.Frame):
 
         # Inicializa los campos de entrada según el generador inicial
         self.update_input_fields()
-
-
 
     def clear_input_frame(self):
         for widget in self.input_frame.winfo_children():
@@ -94,40 +91,12 @@ class TablesGeneratorAndTestFrame(tk.Frame):
 
         self.clear_result_frame()
 
-        if generator == "LCG":
-            obj = LCG(params["a"], params["x0"], params["m"], params["c"], params["min_val"], params["max_val"])
-            obj.calculate_seed(params["count"])
-            columns = ("xi", "ri", "ni")
-            data = list(zip(obj.xi_list, obj.ri_list, obj.ni_list))
-
-        elif generator == "MLCG":
-            obj = MLCG(params["a"], params["x0"], params["m"], params["min_val"], params["max_val"])
-            obj.calculate_seed(params["count"])
-            columns = ("xi", "ri", "ni")
-            data = list(zip(obj.xi_list, obj.ri_list, obj.ni_list))
-
-        elif generator == "MiddleSquare":
-            obj = MiddleSquare(params["number"], params["digits"], count=params["count"])
-            columns = ("xi", "ri")
-            data = list(zip(obj.values, obj.normalized_values))
-
-        elif generator == "ProductoMedio":
-            obj = ProductoMedio(params["number1"], params["number2"], params["digits"], count=params["count"])
-            columns = ("xi", "ri")
-            data = list(zip(obj.list, obj.normalized_list))
-
-        elif generator == "Exponential":
-            obj = ExponentialGenerator(params["lambda_val"])
-            obj.generate(params["count"])
-            columns = ("Index", "Value")
-            data = list(enumerate(obj.exponential_list, start=1))
-
-        else:
-            messagebox.showerror("Error", "Generador no reconocido.")
-            return
-
-        # Mostrar tabla de resultados
-        self.display_table(columns, data)
+        # Llama al controlador para generar los números
+        try:
+            columns, data = self.controller.generate_numbers(generator, params)
+            self.display_table(columns, data)
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
 
     def display_table(self, columns, data):
         # Crea un Treeview para mostrar los datos
