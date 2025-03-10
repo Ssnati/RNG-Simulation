@@ -116,7 +116,9 @@ class KS:
         for i in range(self.intervals_number):
             min_value = self.min_value + i * self.range_value if i > 0 else self.min_value
             max_value = min_value + self.range_value
-            self.intervals[(min_value, max_value)] = {"freq_o": 0, "freq_o_a": 0, "prob_o_a": 0,
+            self.intervals[(min_value, max_value)] = {"freq_o": 0,
+                                                      "freq_o_a": 0,
+                                                      "prob_o_a": 0,
                                                       "freq_e_a": expected_freq * (i + 1),
                                                       "prob_e_a": (expected_freq * (i + 1)) / len(self.number_list),
                                                       "abs_diff": 0}

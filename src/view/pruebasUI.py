@@ -69,7 +69,7 @@ class ChiSquareFrame(ttk.Frame):
         # Limpia la tabla antes de agregar nuevos datos
         for row in self.tree.get_children():
             self.tree.delete(row)
-            
+
         # Agrega los datos nuevos
         for i, ((min_value, max_value), data) in enumerate(intervals.items(), start=1):
             self.tree.insert("", "end", values=(
@@ -88,7 +88,6 @@ class ChiSquareFrame(ttk.Frame):
         # {(0, 12): {"freq_o": 0, "freq_e": expected_freq, "square_chi": 0}}
 
 
-
 class MiddleProofFrame(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -100,7 +99,6 @@ class MiddleProofFrame(ttk.Frame):
 
         self.create_title()
         self.create_limits_and_average()
-        self.create_variance()
         self.create_check_label()
 
     def create_title(self):
@@ -109,33 +107,29 @@ class MiddleProofFrame(ttk.Frame):
 
     def create_limits_and_average(self):
         """Crea las etiquetas y valores para los límites y el promedio."""
-        self.inf_lim_label = ttk.Label(self, text="0.0")
+        self.inf_lim_label = ttk.Label(self, text="Limite Superior: 0.0")
         self.inf_lim_label.pack()
-        self.avarage_label = ttk.Label(self, text="0.0")
-        self.sup_lim_label = ttk.Label(self, text="0,0")
-     #   self.create_label_with_value("Límite Inferior:", "0.0", "inf_lim_label")
-      #  self.create_label_with_value("Promedio:", "0.0", "average_label")
-       # self.create_label_with_value("Límite Superior:", "0.0", "sup_lim_label")
+        self.avarage_label = ttk.Label(self, text="Promedio: 0.0")
+        self.avarage_label.pack()
+        self.sup_lim_label = ttk.Label(self, text="Limite Inferior: 0,0")
+        self.sup_lim_label.pack()
+        self.variance_label = ttk.Label(self, text="Varianza: 0,0")
+        self.variance_label.pack()
 
-    def create_variance(self):
-        """Crea la etiqueta y valor de la varianza."""
-        self.create_label_with_value("Varianza:", "0.0", "variance_label")
+    #   self.create_label_with_value("Límite Inferior:", "0.0", "inf_lim_label")
+    #  self.create_label_with_value("Promedio:", "0.0", "average_label")
+    # self.create_label_with_value("Límite Superior:", "0.0", "sup_lim_label")
 
     def create_check_label(self):
         """Muestra si la prueba pasó o no."""
         self.check_label = ttk.Label(self, text="❌ No Sirve", font=("Arial", 12), foreground="red")
         self.check_label.pack()
 
-    def create_label_with_value(self, text, value, attribute_name):
-        """Crea una etiqueta con su respectivo valor y lo almacena en un atributo."""
-        ttk.Label(self, text=text).pack()
-        setattr(self, attribute_name, ttk.Label(self, text=value))
-        getattr(self, attribute_name).pack()
-    
     def fillTotals(self, totals):
-        self.inf_lim_label.configure(text=totals["inf_lim"])
-        self.avarage_label.configure(text=totals["average"])
-        self.sup_lim_label.configure(text=totals["sup_lim"])
+        self.inf_lim_label.configure(text="Limite Inferior: " + str(totals["inf_lim"]))
+        self.avarage_label.configure(text="Promedio: " + str(totals["average"]))
+        self.sup_lim_label.configure(text="Limite Superior: " + str(totals["sup_lim"]))
+        self.variance_label.configure(text="Varianza: " + str(totals["variance"]))
 
 
 class KSFrame(ttk.Frame):
@@ -154,7 +148,8 @@ class KSFrame(ttk.Frame):
 
     def create_labels(self):
         """Crea las etiquetas para DM Calculado y DM Crítico."""
-        ttk.Label(self, text="Prueba de Kolmogorov-Smirnov", font=("Arial", 14)).grid(row=0, column=0, columnspan=2, pady=10)
+        ttk.Label(self, text="Prueba de Kolmogorov-Smirnov", font=("Arial", 14)).grid(row=0, column=0, columnspan=2,
+                                                                                      pady=10)
 
         ttk.Label(self, text="DM Calculado:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
         self.dm_calculated_label = ttk.Label(self, text="0.0")
@@ -166,7 +161,8 @@ class KSFrame(ttk.Frame):
 
     def create_table(self):
         """Crea la tabla de intervalos con encabezados."""
-        columns = ("Inicial", "Final", "Freq. Obtenida", "Freq. Acumulada", "Prob. Acumulada", "Prob. Esperada", "Diferencia")
+        columns = (
+            "Inicial", "Final", "Freq. Obtenida", "Freq. Acumulada", "Prob. Acumulada", "Prob. Esperada", "Diferencia")
         self.tree = ttk.Treeview(self, columns=columns, show="headings", height=15)
 
         for col in columns:
@@ -185,13 +181,13 @@ class KSFrame(ttk.Frame):
         """Muestra si la prueba pasó o no."""
         self.check_label = ttk.Label(self, text="❌ No Sirve", font=("Arial", 12), foreground="red")
         self.check_label.grid(row=4, column=0, columnspan=2, pady=10)
-    
-    def fillTotals(self,intervals, totals):
+
+    def fillTotals(self, intervals, totals):
         # """Llena la tabla con los datos generados en el backend."""
         # Limpia la tabla antes de agregar nuevos datos
         for row in self.tree.get_children():
             self.tree.delete(row)
-            
+
         # Agrega los datos nuevos
         for i, ((inicial, final), data) in enumerate(intervals.items(), start=1):
             self.tree.insert("", "end", values=(
@@ -199,18 +195,27 @@ class KSFrame(ttk.Frame):
                 f"{final:.4f}",  # Límite superior
                 data["freq_o"],  # Frecuencia obtenida
                 data["freq_e"],  # Frecuencia esperada
-                data["prob_o_a"], # prob acumulada
-                data["prob.o_e"], # Prob esperada
+                data["prob_o_a"],  # prob acumulada
+                data["prob.o_e"],  # Prob esperada
                 f"{data['abs_diff']:.4f}"  # Diferencia (Chi²)
             ))
-        
+
+        """
+                    "freq_o"  Obtenida
+                    "freq_o_a" Obtenida acumulada
+                    "prob_o_a"
+                    "freq_e_a"
+                    "prob_e_a"
+                    "abs_diff"
+        """
+
         self.dm_calculated_label.configure(text=totals["dm_calculated"])
         self.dm_critic_label.configure(text=totals["dm_critic"])
 
-    #Formato KS:
+    # Formato KS:
 # {(0, 12): {
-            #"freq_o": 0, 
-            #"freq_e_a": expected_freq * (i + 1), 
-            #"prob_e_a": (expected_freq * (i + 1)) / len(self.number_list), 
-            #"abs_diff": 0}
-            #            }
+# "freq_o": 0,
+# "freq_e_a": expected_freq * (i + 1),
+# "prob_e_a": (expected_freq * (i + 1)) / len(self.number_list),
+# "abs_diff": 0}
+#             }
