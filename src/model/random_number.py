@@ -60,15 +60,15 @@ if __name__ == "__main__":
 
 
 class MiddleSquare:
-    def __init__(self, number, digits):
+    def __init__(self, number, digits, count):
         self.list = []
         self.normalized_list = []
         self.number = number
         self.digits = digits
-        self.calculate()
+        self.calculate(count)
 
-    def calculate(self):
-        for _ in range(20):
+    def calculate(self, count):
+        for _ in range(count):
             if not self.list:
                 self.list.append(self.take_central_digits(self.number))
             else:
@@ -144,17 +144,17 @@ class ExponentialGenerator:
 
 
 class ProductoMedio:
-    def __init__(self, number1, number2, digits):
+    def __init__(self, number1, number2, digits, count):
         self.list = []
         self.normalized_list = []
         self.number1 = number1
         self.number2 = number2
         self.digits = digits
-        self.calculate()
+        self.calculate(count)
     
-    def calculate(self):
+    def calculate(self, count):
         temp = 0
-        for _ in range(20):
+        for _ in range(count):
             temp = self.take_central_digits(self.number1 * self.number2)
             self.list.append(temp)
             self.number1 = self.number2
