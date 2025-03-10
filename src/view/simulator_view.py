@@ -41,7 +41,7 @@ class SimulatorView(tk.Frame):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-        
+
 class ButtonsFrame(tk.Frame):
     def __init__(self, parent, controller, tables_frame):
         super().__init__(parent)

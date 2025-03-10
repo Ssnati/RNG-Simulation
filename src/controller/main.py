@@ -5,7 +5,7 @@ from src.model.random_number import LCG, MLCG, MiddleSquare, ProductoMedio, Expo
 
 class Controller:
     def __init__(self):
-        self.controller = WindowMainController(self)
+        self.main_window = WindowMainController(self)
         self.current_generation_method_name = None  # Nombre del método de generación
         self.current_generation_method = None  # Objeto del método de generación
         self.current_generation_list = []  # Lista de números generados
@@ -22,17 +22,17 @@ class Controller:
         print(self.current_generation_list)
 
     def exit(self):
-        self.controller.show_welcome()
+        self.main_window.show_welcome()
 
     def change_generator_selected(self, selected_generator):
         self.current_generation_method_name = selected_generator
         print(selected_generator)
 
     def show_simulator(self):
-        self.controller.show_simulator()
+        self.main_window.show_simulator()
 
     def start(self):
-        self.controller.start()
+        self.main_window.start()
 
     def generate_numbers(self, generator_name, params):
         """
@@ -75,36 +75,6 @@ class Controller:
         # Guardar la lista generada en el controlador
         self.current_generation_list = data
         return columns, data
-    def __init__(self):
-        self.controller = WindowMainController(self)
-        self.current_generation_method_name = None  # Nombre del método de generación
-        self.current_generation_method = None  # Objeto del método de generación
-        self.current_generation_list = []  # Lista de números generados
-
-        self.current_test_name = None  # Nombre de la prueba
-        self.current_test = None  # Objeto de la prueba
-        self.current_test_result = []  # Resultado de la prueba
-
-        self.exporter = exporter.CsvExporter()
-
-    def save_generation_numbers(self, path):
-        self.exporter.path = path
-        self.exporter.export(self.current_generation_list)
-        print(self.current_generation_list)
-
-    def exit(self):
-        self.controller.show_welcome()
-
-    def change_generator_selected(self, selected_generator):
-        self.current_generation_method_name = selected_generator
-        print(selected_generator)
-
-
-    def show_simulator(self):
-        self.controller.show_simulator()
-
-    def start(self):
-        self.controller.start()
 
 
 if __name__ == '__main__':
