@@ -3,6 +3,7 @@ import random_number
 import statistics as st
 from scipy.stats import chi2
 
+
 class ChiSquare:
 
     def __init__(self, number_list):
@@ -10,7 +11,7 @@ class ChiSquare:
         self.intervals_number = int(math.sqrt(len(number_list)))
         self.min_value = min(number_list)
         self.max_value = max(number_list)
-        self.range_value = (self.max_value - self.min_value)/self.intervals_number
+        self.range_value = (self.max_value - self.min_value) / self.intervals_number
         self.intervals = {}
         self.squ_chi = 0
         self.squ_chi_critic = chi2.ppf(0.95, self.intervals_number - 1)
@@ -21,23 +22,25 @@ class ChiSquare:
             min_value = self.min_value + i * self.range_value if i > 0 else self.min_value
             max_value = min_value + self.range_value
             self.intervals[(min_value, max_value)] = {"freq_o": 0, "freq_e": expected_freq, "square_chi": 0}
-    
+            # {(0, 12): {"freq_o": 0, "freq_e": expected_freq, "square_chi": 0}}
+
     def calculate_frequence(self):
         for number in self.number_list:
-            for (min,max) in self.intervals:
+            for (min, max) in self.intervals:
                 if min <= number < max or (max == self.max_value and number == max):
                     self.intervals[(min, max)]["freq_o"] += 1
                     break
 
     def calculate_squ_chi(self):
         for freqs in self.intervals.values():
-            freqs["square_chi"] = pow(freqs["freq_o"] - freqs["freq_e"], 2)/freqs["freq_e"]
+            freqs["square_chi"] = pow(freqs["freq_o"] - freqs["freq_e"], 2) / freqs["freq_e"]
             self.squ_chi += freqs["square_chi"]
 
     def show_intervals(self):
         for interval, frequency in self.intervals.items():
             print(f"Intervalo {interval}: {frequency}")
-        print(f"{self.squ_chi}    critico {self.squ_chi_critic}"  )
+        print(f"{self.squ_chi}    critico {self.squ_chi_critic}")
+
 
 if __name__ == "__main__":
     alg = random_number.LCG(5, 7, 991, 3, 4, 19)
@@ -48,6 +51,7 @@ if __name__ == "__main__":
     pm.calculate_frequence()
     pm.calculate_squ_chi()
     pm.show_intervals()
+
 
 class MiddleProof:
     def __init__(self, number_list):
@@ -92,6 +96,8 @@ if __name__ == "__main__":
     pm = MiddleProof(alg.ri_list)
     pm.calculate_proof()
 """
+
+
 class KS:
 
     def __init__(self, number_list):
@@ -99,25 +105,36 @@ class KS:
         self.intervals_number = int(math.sqrt(len(number_list)))
         self.min_value = min(number_list)
         self.max_value = max(number_list)
-        self.range_value = (self.max_value - self.min_value)/self.intervals_number
+        self.range_value = (self.max_value - self.min_value) / self.intervals_number
         self.intervals = {}
         self.dm_calculated = 0
-        self.dm_critic = 1.36/(math.sqrt(len(self.number_list)))
+        self.dm_critic = 1.36 / (math.sqrt(len(self.number_list)))
 
     def create_intervals(self):
         expected_freq = len(self.number_list) / self.intervals_number
         for i in range(self.intervals_number):
             min_value = self.min_value + i * self.range_value if i > 0 else self.min_value
             max_value = min_value + self.range_value
-            self.intervals[(min_value, max_value)] = {"freq_o": 0, "freq_o_a": 0, "prob_o_a": 0,"freq_e_a": expected_freq*(i + 1), "prob_e_a":(expected_freq*(i +1))/len(self.number_list), "abs_diff": 0}
-    
+            self.intervals[(min_value, max_value)] = {"freq_o": 0, "freq_o_a": 0, "prob_o_a": 0,
+                                                      "freq_e_a": expected_freq * (i + 1),
+                                                      "prob_e_a": (expected_freq * (i + 1)) / len(self.number_list),
+                                                      "abs_diff": 0}
+            """
+            # {(0, 12): {
+                            "freq_o": 0, 
+                            "freq_e_a": expected_freq * (i + 1), 
+                            "prob_e_a": (expected_freq * (i + 1)) / len(self.number_list), 
+                            "abs_diff": 0}
+                            }
+            """
+
+
     def calculate_frequence_obtained(self):
         for number in self.number_list:
-            for (min,max) in self.intervals:
+            for (min, max) in self.intervals:
                 if min <= number < max or (max == self.max_value and number == max):
                     self.intervals[(min, max)]["freq_o"] += 1
                     break
-    
 
     def calculate_frequence_obtained_acumulated(self):
         size_list = len(self.number_list)
@@ -134,17 +151,18 @@ class KS:
                 self.dm_calculated = frequency["abs_diff"]
         self.calculate_proof()
 
-
-
     def calculate_proof(self):
         if self.dm_calculated < self.dm_critic:
-            print(f"La lista de números aleatorios sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
+            print(
+                f"La lista de números aleatorios sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
         else:
-            print(f"La lista de números aleatorios NO sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
+            print(
+                f"La lista de números aleatorios NO sigue una distribución uniforme (DM = {self.dm_calculated:.6f}, DM crítico = {self.dm_critic:.6f})")
 
     def show_intervals(self):
         for interval, frequency in self.intervals.items():
             print(f"Intervalo {interval}: {frequency}")
+
 
 """
 if __name__ == "__main__":
@@ -159,4 +177,3 @@ if __name__ == "__main__":
     pm.show_intervals()
 
 """
-    
