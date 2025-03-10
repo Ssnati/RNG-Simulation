@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from src.model.random_number import LCG, MLCG, MiddleSquare, ProductoMedio, ExponentialGenerator
+
+
 class TablesGeneratorAndTestFrame(tk.Frame):
     def __init__(self, parent, controller=None):
         super().__init__(parent)
         self.controller = controller
         self.parent = parent
-        
+
         # Contenedor general que divide en izquierda y derecha
         self.main_container = tk.Frame(self)
         self.main_container.pack(fill=tk.BOTH, expand=True)
@@ -36,6 +38,9 @@ class TablesGeneratorAndTestFrame(tk.Frame):
         # Sección de Resultados (Tabla)
         self.result_frame = tk.Frame(self.left_frame)
         self.result_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.test_button = tk.Button(self.left_frame, text="Hacer Pruebas", command=self.controller.show_test_window)
+        self.test_button.pack(pady=5)
 
         self.tree = None
 

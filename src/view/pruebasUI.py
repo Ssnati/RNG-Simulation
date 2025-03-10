@@ -3,7 +3,7 @@ from tkinter import ttk
 
 
 class ChiSquareFrame(ttk.Frame):
-    def __init__(self, parent,controller):
+    def __init__(self, parent):
         super().__init__(parent)
         self.setup_ui()
 
@@ -90,7 +90,7 @@ class ChiSquareFrame(ttk.Frame):
 
 
 class MiddleProofFrame(ttk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent):
         super().__init__(parent)
         self.setup_ui()
 
@@ -139,7 +139,7 @@ class MiddleProofFrame(ttk.Frame):
 
 
 class KSFrame(ttk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent):
         super().__init__(parent)
         self.setup_ui()
 

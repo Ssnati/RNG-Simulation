@@ -1,18 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
 
-from pruebasUI import ChiSquareFrame, MiddleProofFrame, KSFrame
+from src.view.pruebasUI import ChiSquareFrame, MiddleProofFrame, KSFrame
 
 
 class ventanaPruebas(tk.Tk):
-    def __init__(self,controller = None):
+    def __init__(self, controller):
+        super().__init__()
         self.title("Ventana de Pruebas Estadísticas")
         self.geometry("1000x800")
         self.controller = controller
 
         # Frame para los botones de selección
         self.selector_frame = ttk.Frame(self, borderwidth=2, border=10)
-        self.selector_frame.pack(fill=tk.X, anchor= "sw")
+        self.selector_frame.pack(fill=tk.X, anchor="sw")
 
         # Botones para seleccionar pruebas
         ttk.Button(self.selector_frame, text="Prueba Chi-Cuadrado",
@@ -41,11 +42,10 @@ class ventanaPruebas(tk.Tk):
         """Muestra el Frame de la Prueba Chi-Cuadrado."""
         self.hide_all_frames()
         self.chi_square_frame.pack(fill=tk.BOTH, expand=True)
-        
-        listchi , totals = self.controller.run_test("chi2")  # devuelve la lista con los datos
+
+        listchi, totals = self.controller.run_test("chi2")  # devuelve la lista con los datos
         # {(min, max):{freq}}, {chi:}
         self.chi_square_frame.fillTable(listchi, totals)
-        
 
     def show_middle_proof(self):
         """Muestra el Frame de la Prueba de Medias."""
@@ -60,8 +60,8 @@ class ventanaPruebas(tk.Tk):
         self.hide_all_frames()
         self.ks_frame.pack(fill=tk.BOTH, expand=True)
 
-        totals = self.controller.run_test("KS")
-        self.ks_frame.fillTotals(totals)
+        listks, totals = self.controller.run_test("ks")
+        self.ks_frame.fillTotals(listks, totals)
 
     def hide_all_frames(self):
         """Oculta todos los Frames de pruebas."""

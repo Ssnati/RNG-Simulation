@@ -1,4 +1,5 @@
 from src.model import exporter
+from src.view.ventana_pruebas import ventanaPruebas
 from src.view.window_controller import WindowMainController
 
 from src.model.random_number import LCG, MLCG, MiddleSquare, ProductoMedio, ExponentialGenerator
@@ -15,6 +16,8 @@ class Controller:
         self.current_test_name = None  # Nombre de la prueba
         self.current_test = None  # Objeto de la prueba
         self.current_test_result = []  # Resultado de la prueba
+
+        self.test_window = None
 
         self.exporter = exporter.CsvExporter()
 
@@ -82,8 +85,6 @@ class Controller:
         else:
             raise ValueError("Generador no reconocido.")
 
-        # Guardar la lista generada en el controlador
-        self.current_generation_list = data
         return columns, data
 
     def run_test(self, test_name):
@@ -136,6 +137,12 @@ class Controller:
 
         else:
             raise ValueError("Prueba no reconocida.")
+
+    def show_test_window(self):
+        if self.test_window is None:
+            self.test_window = ventanaPruebas(self)
+        elif not self.test_window.winfo_exists():
+            self.test_window = ventanaPruebas(self)
 
 
 if __name__ == '__main__':
