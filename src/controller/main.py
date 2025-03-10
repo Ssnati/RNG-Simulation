@@ -129,8 +129,10 @@ class Controller:
             self.current_test.calculate_frequence_obtained_acumulated()
             self.current_test.calculate_dm()
             data = {
-                "min_value": self.current_test.min_value,
-                "max_value": self.current_test.max_value
+                "dm_calculated": self.current_test.dm_calculated,
+                "dm_critic": self.current_test.dm_critic
+              #  "min_value": self.current_test.min_value,
+              #  "max_value": self.current_test.max_value
             }
             self.current_test_result = self.current_test.intervals
             return self.current_test_result, data

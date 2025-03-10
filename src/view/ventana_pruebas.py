@@ -8,7 +8,7 @@ class ventanaPruebas(tk.Tk):
     def __init__(self, controller):
         super().__init__()
         self.title("Ventana de Pruebas Estadísticas")
-        self.geometry("1000x800")
+        self.geometry("900x700")
         self.controller = controller
 
         # Frame para los botones de selección
@@ -25,7 +25,7 @@ class ventanaPruebas(tk.Tk):
 
         # Frame contenedor para las pruebas
         self.container_frame = ttk.Frame(self)
-        self.container_frame.place(x=20, y=400, anchor="w", width=600, height=500)
+        self.container_frame.place(x=20, y=400, anchor="w", width=800, height=500)
 
         # Inicializar Frames de pruebas (ocultos inicialmente)
         self.chi_square_frame = ChiSquareFrame(self.container_frame)
@@ -69,6 +69,3 @@ class ventanaPruebas(tk.Tk):
         self.middle_proof_frame.pack_forget()
         self.ks_frame.pack_forget()
 
-
-if __name__ == "__main__":
-    app = ventanaPruebas()
