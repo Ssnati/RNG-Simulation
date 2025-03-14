@@ -66,6 +66,11 @@ class MiddleProof:
         """Calcula la varianza de la lista de números."""
         self.variance = st.variance(self.number_list)
 
+    def calculate_proof(self):
+        self.calculate_average()
+        self.calculate_limits()
+        self.calculate_variance()
+
 class KS:
     """
     Clase para realizar la prueba de Kolmogorov-Smirnov sobre una lista de números.
