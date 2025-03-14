@@ -1,6 +1,20 @@
-import math, random
+import math
+import random
+
 class LCG:
+    """
+    Generador Congruencial Lineal (LCG) para generar números pseudoaleatorios.
+    """
     def __init__(self, a, x0, m, c, min_val, max_val):
+        """
+        Inicializa el generador con los parámetros dados.
+        :param a: Multiplicador
+        :param x0: Semilla inicial
+        :param m: Módulo
+        :param c: Constante aditiva
+        :param min_val: Valor mínimo del rango de salida
+        :param max_val: Valor máximo del rango de salida
+        """
         self.a = a
         self.x0 = x0
         self.m = m
@@ -12,54 +26,37 @@ class LCG:
         self.ni_list = []
 
     def calculate_seed(self, i):
+        """
+        Genera una secuencia de valores pseudoaleatorios.
+        :param i: Cantidad de valores a generar
+        """
         for _ in range(i):
-            if not self.xi_list:
-                xi = ((self.a * self.x0) + self.c) % self.m
-            else:
-                xi = (self.a * self.xi_list[-1] + self.c) % self.m
-            
+            xi = ((self.a * (self.xi_list[-1] if self.xi_list else self.x0)) + self.c) % self.m
             self.xi_list.append(xi)
             self.calculate_ri(xi)
 
-    def print_xi(self):
-        for index, (xi, ri, ni) in enumerate(zip(self.xi_list, self.ri_list, self.ni_list), start=1):
-            print(f"{ri}")
-
     def calculate_ri(self, xi):
-        ri = xi / (self.m)
+        """
+        Calcula el valor normalizado ri.
+        :param xi: Valor generado en la secuencia
+        """
+        ri = xi / self.m
         self.calculate_ni(ri)
         self.ri_list.append(ri)
 
     def calculate_ni(self, ri):
+        """
+        Calcula el valor escalado ni dentro del rango especificado.
+        :param ri: Valor normalizado
+        """
         ni = self.min + ((self.max - self.min) * ri)
         self.ni_list.append(ni)
 
-"""
-if __name__ == "__main__":
-    alg = LCG(5, 7, 16, 3, 4, 19)
-    alg.calculate_seed(100)
-    alg.print_xi() 
-    
-if __name__ == "__main__":
-    cm = MiddleSquare(2573, 3)
-    cm.print_list()    
-
-if __name__ == "__main__":
-    alg = MLCG(5, 7, 16, 4, 19)
-    alg.calculate_seed(100)
-    alg.print_xi()
-if __name__ == "__main__":
-    exp_gen = ExponentialGenerator(1.5)
-    exp_gen.generate(100)
-    exp_gen.print_values()
-
-if __name__ == "__main__":
-    pm = ProductoMedio(5015, 5734, 4)
-    pm.print_list()
-"""
-
 
 class MiddleSquare:
+    """
+    Generador de números pseudoaleatorios basado en el método del cuadrado medio.
+    """
     def __init__(self, number, digits, count):
         self.list = []
         self.normalized_list = []
@@ -68,32 +65,36 @@ class MiddleSquare:
         self.calculate(count)
 
     def calculate(self, count):
+        """
+        Genera una secuencia de números utilizando el método del cuadrado medio.
+        :param count: Cantidad de números a generar
+        """
         for _ in range(count):
-            if not self.list:
-                self.list.append(self.take_central_digits(self.number))
-            else:
-                self.list.append(self.take_central_digits(self.list[-1]))
+            self.list.append(self.take_central_digits(self.list[-1] if self.list else self.number))
 
     def take_central_digits(self, number):
-        n = number * number
-        str_n = str(n)
-        digits_to_del = len(str_n) - self.digits
-        num_to_del = digits_to_del // 2
-        fin = num_to_del + self.digits
-        num = int(str_n[num_to_del:fin])
+        """
+        Extrae los dígitos centrales del número al cuadrado.
+        :param number: Número de entrada
+        :return: Dígitos centrales
+        """
+        str_n = str(number * number).zfill(self.digits * 2)
+        mid_start = (len(str_n) - self.digits) // 2
+        num = int(str_n[mid_start:mid_start + self.digits])
         self.normalize_list(num)
         return num
     
     def normalize_list(self, number):
-        self.normalized_list.append(number/pow(10, len(str(number))))
-
-
-    def print_list(self):
-        for i in range(len(self.list)):
-            print(f"{self.list[i]}   {self.normalized_list[i]}")
+        """
+        Normaliza el número para que esté en el rango [0,1].
+        """
+        self.normalized_list.append(number / 10**len(str(number)))
 
 
 class MLCG:
+    """
+    Generador Congruencial Multiplicativo (MLCG).
+    """
     def __init__(self, a, x0, m, min_val, max_val):
         self.a = a
         self.x0 = x0
@@ -105,45 +106,54 @@ class MLCG:
         self.ni_list = []
 
     def calculate_seed(self, i):
+        """
+        Genera una secuencia de valores pseudoaleatorios.
+        :param i: Cantidad de valores a generar
+        """
         for _ in range(i):
-            if not self.xi_list:
-                xi = (self.a * self.x0) % self.m
-            else:
-                xi = (self.a * self.xi_list[-1]) % self.m
-            
+            xi = (self.a * (self.xi_list[-1] if self.xi_list else self.x0)) % self.m
             self.xi_list.append(xi)
             self.calculate_ri(xi)
 
-    def print_xi(self):
-        for index, (xi, ri, ni) in enumerate(zip(self.xi_list, self.ri_list, self.ni_list), start=1):
-            print(f"{index}:  {xi}, {ri}, {ni}")
-
     def calculate_ri(self, xi):
-        ri = xi / (self.m)
+        """
+        Calcula el valor normalizado ri.
+        :param xi: Valor generado en la secuencia
+        """
+        ri = xi / self.m
         self.calculate_ni(ri)
         self.ri_list.append(ri)
 
     def calculate_ni(self, ri):
+        """
+        Calcula el valor escalado ni dentro del rango especificado.
+        :param ri: Valor normalizado
+        """
         ni = self.min + ((self.max - self.min) * ri)
         self.ni_list.append(ni)
 
 
 class ExponentialGenerator:
+    """
+    Generador de números con distribución exponencial.
+    """
     def __init__(self, lambda_val):
         self.lambda_val = lambda_val
         self.exponential_list = []
     
     def generate(self, n):
-        for _ in range(0, n):
-            self.exponential_list.append((-math.log(1 - random.random()) / self.lambda_val))
-            #self.exponential_list.append(int((-math.log(1 - random.random()) / self.lambda_val)*1000))
-    
-    def print_values(self):
-        for index, value in enumerate(self.exponential_list, start=1):
-            print(f"{index}: {value}")
+        """
+        Genera números aleatorios con distribución exponencial.
+        :param n: Cantidad de valores a generar
+        """
+        for _ in range(n):
+            self.exponential_list.append(-math.log(1 - random.random()) / self.lambda_val)
 
 
 class ProductoMedio:
+    """
+    Generador basado en el método del producto medio.
+    """
     def __init__(self, number1, number2, digits, count):
         self.list = []
         self.normalized_list = []
@@ -153,30 +163,29 @@ class ProductoMedio:
         self.calculate(count)
     
     def calculate(self, count):
-        temp = 0
+        """
+        Genera números utilizando el método del producto medio.
+        :param count: Cantidad de valores a generar
+        """
         for _ in range(count):
             temp = self.take_central_digits(self.number1 * self.number2)
             self.list.append(temp)
-            self.number1 = self.number2
-            self.number2 = temp
+            self.number1, self.number2 = self.number2, temp
     
     def take_central_digits(self, number):
-        str_n = str(number).zfill(self.digits * 2) 
-        digitstodel = len(str_n) - self.digits
-        numtodel = digitstodel // 2
-        fin = numtodel + self.digits
-        num = int(str_n[numtodel:fin])
+        """
+        Extrae los dígitos centrales del número generado.
+        :param number: Número del que se extraen las cifras del medio
+        """
+        str_n = str(number).zfill(self.digits * 2)
+        mid_start = (len(str_n) - self.digits) // 2
+        num = int(str_n[mid_start:mid_start + self.digits])
         self.normalize_list(num)
         return num
     
     def normalize_list(self, number):
-        self.normalized_list.append(number/pow(10, len(str(number))))
-    
-    def print_list(self):
-        for i in range(len(self.list)):
-            print(f"{self.list[i]}   {self.normalized_list[i]}")
-
-
-if __name__ == "__main__":
-    pm = ProductoMedio(5015, 5734, 4)
-    pm.print_list()
+        """
+        Normaliza el número generado para que esté en el rango [0,1].
+        :param number: Número que se normaliza
+        """
+        self.normalized_list.append(number / 10**len(str(number)))
