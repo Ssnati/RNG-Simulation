@@ -1,18 +1,26 @@
 import tkinter as tk
 from tkinter import ttk
 
-from pruebasUI import ChiSquareFrame, MiddleProofFrame, KSFrame
-
+from src.view.pruebasUI import ChiSquareFrame, MiddleProofFrame, KSFrame
 
 class ventanaPruebas(tk.Tk):
-    def __init__(self,controller = None):
+    """
+    Clase que representa la ventana principal de pruebas estadísticas.
+    Permite al usuario seleccionar y visualizar diferentes pruebas: 
+    - Prueba Chi-Cuadrado
+    - Prueba de Medias
+    - Prueba KS
+    """
+    def __init__(self, controller):
+        """Inicializa la ventana de pruebas."""
+        super().__init__()
         self.title("Ventana de Pruebas Estadísticas")
-        self.geometry("1000x800")
-        self.controller = controller
+        self.geometry("900x700")
+        self.controller = controller  # Controlador para ejecutar las pruebas
 
         # Frame para los botones de selección
         self.selector_frame = ttk.Frame(self, borderwidth=2, border=10)
-        self.selector_frame.pack(fill=tk.X, anchor= "sw")
+        self.selector_frame.pack(fill=tk.X, anchor="sw")
 
         # Botones para seleccionar pruebas
         ttk.Button(self.selector_frame, text="Prueba Chi-Cuadrado",
@@ -24,7 +32,7 @@ class ventanaPruebas(tk.Tk):
 
         # Frame contenedor para las pruebas
         self.container_frame = ttk.Frame(self)
-        self.container_frame.place(x=20, y=400, anchor="w", width=600, height=500)
+        self.container_frame.place(x=20, y=400, anchor="w", width=800, height=500)
 
         # Inicializar Frames de pruebas (ocultos inicialmente)
         self.chi_square_frame = ChiSquareFrame(self.container_frame)
@@ -38,37 +46,34 @@ class ventanaPruebas(tk.Tk):
         self.mainloop()
 
     def show_chi_square(self):
-        """Muestra el Frame de la Prueba Chi-Cuadrado."""
+        """Muestra el Frame de la Prueba Chi-Cuadrado y ejecuta la prueba."""
         self.hide_all_frames()
         self.chi_square_frame.pack(fill=tk.BOTH, expand=True)
-        
-        listchi , totals = self.controller.run_test("chi2")  # devuelve la lista con los datos
-        # {(min, max):{freq}}, {chi:}
+
+        # Ejecutar prueba Chi-Cuadrado y actualizar la interfaz con los resultados
+        listchi, totals = self.controller.run_test("chi2")  # Devuelve lista de datos y totales
         self.chi_square_frame.fillTable(listchi, totals)
-        
 
     def show_middle_proof(self):
-        """Muestra el Frame de la Prueba de Medias."""
+        """Muestra el Frame de la Prueba de Medias y ejecuta la prueba."""
         self.hide_all_frames()
         self.middle_proof_frame.pack(fill=tk.BOTH, expand=True)
 
+        # Ejecutar prueba de medias y actualizar la interfaz con los resultados
         totals = self.controller.run_test("middleproof")
         self.middle_proof_frame.fillTotals(totals)
 
     def show_ks(self):
-        """Muestra el Frame de la Prueba KS."""
+        """Muestra el Frame de la Prueba KS y ejecuta la prueba."""
         self.hide_all_frames()
         self.ks_frame.pack(fill=tk.BOTH, expand=True)
 
-        totals = self.controller.run_test("KS")
-        self.ks_frame.fillTotals(totals)
+        # Ejecutar prueba KS y actualizar la interfaz con los resultados
+        listks, totals = self.controller.run_test("ks")
+        self.ks_frame.fillTotals(listks, totals)
 
     def hide_all_frames(self):
-        """Oculta todos los Frames de pruebas."""
+        """Oculta todos los Frames de pruebas para mostrar solo el seleccionado."""
         self.chi_square_frame.pack_forget()
         self.middle_proof_frame.pack_forget()
         self.ks_frame.pack_forget()
-
-
-if __name__ == "__main__":
-    app = ventanaPruebas()
