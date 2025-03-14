@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from src.model.random_number import LCG, MLCG, MiddleSquare, ProductoMedio, ExponentialGenerator
 
 
 class TablesGeneratorAndTestFrame(tk.Frame):

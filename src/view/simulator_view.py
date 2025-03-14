@@ -8,6 +8,12 @@ from src.view.generator_and_test_frame import TablesGeneratorAndTestFrame
 class SimulatorView(tk.Frame):
 
     def __init__(self, root_window, controller):
+        """
+        Inicializa la clase SimulatorView con la ventana raíz y el controlador.
+
+        :param root_window: La ventana raíz de la aplicación.
+        :param controller: El controlador para manejar eventos.
+        """
         super().__init__()
         self.root_window = root_window
         self.controller = controller
@@ -16,6 +22,9 @@ class SimulatorView(tk.Frame):
         self.pack()  # Asegúrate de llamar a pack() aquí
 
     def create_widgets(self):
+        """
+        Crea y organiza los widgets en la vista del simulador.
+        """
         title_label = cc.create_label(self.frame_container, "Simulador de Números Pseudoaleatorios", 'title')
         title_label.grid(row=0, column=0, columnspan=2, rowspan=1)
 
@@ -31,10 +40,15 @@ class SimulatorView(tk.Frame):
         cc.create_label(self.frame_container, " " * 100, 'title').grid(row=2, column=0, columnspan=2, rowspan=1)
 
     def destroy(self):
+        """
+        Destruye el contenedor del frame.
+        """
         self.frame_container.destroy()
 
     def pack(self):
-        # Le decimos al frame que se expanda y que se llene de acuerdo al tamaño de la ventana
+        """
+        Empaqueta el contenedor del frame con relleno y expansión.
+        """
         self.frame_container.grid(row=0, column=0, sticky="nsew")
 
         # Configuración interna del frame
@@ -44,6 +58,13 @@ class SimulatorView(tk.Frame):
 
 class ButtonsFrame(tk.Frame):
     def __init__(self, parent, controller, tables_frame):
+        """
+        Inicializa la clase ButtonsFrame con el frame padre, el controlador y el frame de tablas.
+
+        :param parent: El frame padre.
+        :param controller: El controlador para manejar eventos.
+        :param tables_frame: El frame de tablas.
+        """
         super().__init__(parent)
         self.controller = controller
         self.tables_frame = tables_frame  # Referencia al TablesGeneratorAndTestFrame
@@ -52,11 +73,15 @@ class ButtonsFrame(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        """
+        Crea y organiza los widgets en el frame de botones.
+        """
         # Usamos la variable del generador del tables_frame
         selected_generator = self.tables_frame.generator_var
 
         # Creamos el combobox en el ButtonsFrame
-        generator_combo = ttk.Combobox(self, textvariable=selected_generator, values=self.generator_types, state="readonly")
+        generator_combo = ttk.Combobox(self, textvariable=selected_generator, values=self.generator_types,
+                                       state="readonly")
         generator_combo.grid(row=0, column=0, padx=10, pady=10)
 
         # Evento cuando seleccionan un item
@@ -88,6 +113,9 @@ class ButtonsFrame(tk.Frame):
         exit_button.grid(row=0, column=2, padx=10, pady=10)
 
     def save(self):
+        """
+        Guarda los números generados en un archivo CSV.
+        """
         file_path = filedialog.asksaveasfilename(
             parent=self,
             defaultextension=".csv",
