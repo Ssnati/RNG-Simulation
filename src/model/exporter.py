@@ -3,14 +3,35 @@ import csv
 
 class CsvExporter:
     def __init__(self, path='/'):
+        """
+        Inicializa la clase CsvExporter con la ruta del archivo CSV.
+
+        :param path: Ruta del archivo donde se guardarán los datos.
+        """
         self.path = path
 
     def export(self, data):
         """
-        [0.10532549790626156, 0.31650932905076434, 0.2158685921684453, 0.07950447177037596, 0.04133572896016073, 0.10138901960831413, 0.9710070759549194, 0.15780901716977028, 0.2718254136664529, 0.0629292300057999, 0.44554500450605644, 0.9739292855144606, 0.06936052906095595, 0.3227945484861907, 1.7111943328190506, 0.21240645128314484, 0.279030846174496, 0.10177480844548437, 0.16314163633607534, 0.2525949087960318, 1.0194699473237465, 0.18034128024876614, 0.09406652181582546, 0.388556173504077, 0.27388585097399953, 0.5065454002859565, 0.2033041648867394, 0.20696239322765297, 0.41813798280152675, 0.43218747038995375, 0.4374887116877562, 0.7123526887764952, 0.2121752444265439, 0.07940975250292838, 0.2940947267550119, 0.016278183677053578, 0.05070087394905076, 0.06349345650234474, 0.3925487128434378, 1.0767913786726149, 0.09525496973391494, 0.1936347689074109, 0.2100702155610864, 1.4837269984646018, 0.3632852324442124, 0.5686950121021012, 0.33769658439097666, 0.68714560701435, 0.054319342629999295, 0.17752747832282686]
+        Exporta una lista de datos a un archivo CSV.
 
-        :param data:
-        :return:
+        La lista de datos debe estar en el siguiente formato:
+        - La lista es una lista de elementos, donde cada elemento puede ser un número o una cadena de texto.
+        - Cada elemento de la lista se escribe en una nueva fila del archivo CSV.
+
+        Por ejemplo:
+        - Si la lista de datos es [1, 2, 3, 4, 5], el archivo CSV resultante tendrá el siguiente contenido:
+          1
+          2
+          3
+          4
+          5
+
+        - Si la lista de datos es ["a", "b", "c"], el archivo CSV resultante tendrá el siguiente contenido:
+          a
+          b
+          c
+
+        :param data: Lista de datos a exportar.
         """
         with open(self.path, 'w', newline='') as file:
             writer = csv.writer(file)
