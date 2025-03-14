@@ -8,6 +8,10 @@ from src.model.pruebas import ChiSquare, MiddleProof, KS
 
 class Controller:
     def __init__(self):
+        """
+        Inicializa la clase Controller, configurando la ventana principal y los atributos necesarios
+        para la generación de números y ejecución de pruebas.
+        """
         self.main_window = WindowMainController(self)
         self.current_generation_method_name = None  # Nombre del método de generación
         self.current_generation_method = None  # Objeto del método de generación
@@ -22,24 +26,44 @@ class Controller:
         self.exporter = exporter.CsvExporter()
 
     def save_generation_numbers(self, path):
+        """
+        Guarda los números generados en un archivo CSV.
+
+        :param path: Ruta del archivo donde se guardarán los números.
+        """
         self.exporter.path = path
         self.exporter.export(self.current_generation_list)
 
     def exit(self):
+        """
+        Muestra la ventana de bienvenida al salir.
+        """
         self.main_window.show_welcome()
 
     def change_generator_selected(self, selected_generator):
+        """
+        Cambia el generador seleccionado.
+
+        :param selected_generator: Nombre del generador seleccionado.
+        """
         self.current_generation_method_name = selected_generator
 
     def show_simulator(self):
+        """
+        Muestra la ventana del simulador.
+        """
         self.main_window.show_simulator()
 
     def start(self):
+        """
+        Inicia la ventana principal.
+        """
         self.main_window.start()
 
     def generate_numbers(self, generator_name, params):
         """
         Genera números pseudoaleatorios usando el generador seleccionado.
+
         :param generator_name: Nombre del generador (LCG, MLCG, etc.).
         :param params: Diccionario con los parámetros necesarios para el generador.
         :return: Tupla con (columns, data) para mostrar en la tabla.
@@ -50,7 +74,6 @@ class Controller:
             columns = ("xi", "ri", "ni")
             data = list(zip(obj.xi_list, obj.ri_list, obj.ni_list))
             self.current_generation_list = obj.ri_list
-            # pruebas con ri
 
         elif generator_name == "MLCG":
             obj = MLCG(params["a"], params["x0"], params["m"], params["min_val"], params["max_val"])
@@ -58,21 +81,18 @@ class Controller:
             columns = ("xi", "ri", "ni")
             data = list(zip(obj.xi_list, obj.ri_list, obj.ni_list))
             self.current_generation_list = obj.ri_list
-            # pruebas con ri
 
         elif generator_name == "MiddleSquare":
             obj = MiddleSquare(params["number"], params["digits"], count=params["count"])
             columns = ("ni", "ri")
             data = list(zip(obj.list, obj.normalized_list))
             self.current_generation_list = obj.normalized_list
-            # pruebas con normalized
 
         elif generator_name == "ProductoMedio":
             obj = ProductoMedio(params["number1"], params["number2"], params["digits"], count=params["count"])
             columns = ("ni", "ri")
             data = list(zip(obj.list, obj.normalized_list))
             self.current_generation_list = obj.normalized_list
-            # pruebas con normalized
 
         elif generator_name == "Exponential":
             obj = ExponentialGenerator(params["lambda_val"])
@@ -80,7 +100,6 @@ class Controller:
             columns = ("Index", "Value")
             data = list(enumerate(obj.exponential_list, start=1))
             self.current_generation_list = obj.exponential_list
-            # pruebas con exponential_list
 
         else:
             raise ValueError("Generador no reconocido.")
@@ -90,6 +109,7 @@ class Controller:
     def run_test(self, test_name):
         """
         Ejecuta la prueba estadística seleccionada.
+
         :param test_name: Nombre de la prueba a ejecutar.
         :return: Tupla con (columns, data) para mostrar en la tabla.
         """
@@ -131,8 +151,6 @@ class Controller:
             data = {
                 "dm_calculated": self.current_test.dm_calculated,
                 "dm_critic": self.current_test.dm_critic
-              #  "min_value": self.current_test.min_value,
-              #  "max_value": self.current_test.max_value
             }
             self.current_test_result = self.current_test.intervals
             return self.current_test_result, data
@@ -141,6 +159,9 @@ class Controller:
             raise ValueError("Prueba no reconocida.")
 
     def show_test_window(self):
+        """
+        Muestra la ventana de pruebas.
+        """
         if self.test_window is None:
             self.test_window = ventanaPruebas(self)
         elif not self.test_window.winfo_exists():
